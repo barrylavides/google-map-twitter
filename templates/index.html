@@ -3,42 +3,51 @@
 <head>
     <title>Google Map - Twitter</title>
     <style type="text/css">
-      html, body { height: 100%; margin: 0; padding: 0; margin-top: 50px; }
-      #map { height: 60%; width: 50%; margin: auto; }
+      html, body { height: 100%; margin: 0; padding: 0; margin-top: 10px; }
+      #map { height: 80%; width: 80%; margin: auto; }
     </style>
     <script type="text/javascript" src="//code.jquery.com/jquery-1.4.2.min.js"></script>
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/0.9.16/socket.io.min.js"></script>
-    <script type="text/javascript" charset="utf-8">
-        $(document).ready(function(){
-            namespace = '/tweets';
-
-            // the socket.io documentation recommends sending an explicit package upon connection
-            // this is specially important when using the global namespace
-            var socket = io.connect('//' + document.domain + ':' + location.port + namespace);
-
-            // event handler for server sent data
-            // the data is displayed in the "Received" section of the page
-            socket.on('tweet', function(msg) {
-                console.log(msg);
-            });
-        });
-    </script>
+    <script type="text/javascript" src="https://maps.google.com/maps/api/js"></script>
 </head>
 <body>
     <div id="map"></div>
-
 <script>
-  var map;
-  function initMap() {
-    map = new google.maps.Map(document.getElementById('map'), {
-      center: {lat: 14.5833, lng: 121.0000},
-      zoom: 8
-    })
-  }
+    $(function() {
+      //var latlng = new google.maps.LatLng(38.8833, 77.0167);
+      var latlng = {lat: 38.8833, lng: 77.0167};
+
+      var myOptions = {
+        zoom: 3,
+        center: latlng,
+        mapTypeId: google.maps.MapTypeId.ROADMAP
+      };
+    
+      var map = new google.maps.Map(document.getElementById("map"), myOptions);
+      namespace = '/tweets';
+
+      var socket = io.connect('//' + document.domain + ':' + location.port + namespace);
+
+      socket.on('tweet', function(data) {
+        console.log(data);
+
+        if (data.coordinates !== null) {
+          var loc1 = data.coordinates.coordinates[1];
+          var loc0 = data.coordinates.coordinates[0];
+          var myLatlang = new google.maps.LatLng(loc1, loc0);
+
+          console.log(loc1);
+          console.log(loc0);
+
+          var marker = new google.maps.Marker({
+            position: myLatlang,
+            animation: google.maps.Animation.DROP,
+            map: map
+          })  
+        }
+      });
+    });
 </script>
-<script async defer
-      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBPZnOlNZqG-XbsoehXvQ74HjDTEGlFcGU&callback=initMap">
-    </script>
 </body>
 </html>
 

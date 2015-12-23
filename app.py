@@ -37,7 +37,8 @@ class TwitterStreamer(TwythonStreamer):
 class Watch:
     def __init__(self):
         self.streamer = TwitterStreamer(consumer_key, consumer_secret, access_token_key, access_token_secret)
-        self.green = gevent.spawn(self.streamer.statuses.filter, locations=[-122.75,36.8,-121.75,37.8])
+        locations = [-122.75,36.8,-121.75,37.8]
+        self.green = gevent.spawn(self.streamer.statuses.filter, locations=locations)
 
     def check_alive(self):
         if self.green.dead:
