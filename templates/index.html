@@ -44,6 +44,15 @@
             animation: google.maps.Animation.DROP,
             map: map
           })  
+
+          var infoWindow = new google.maps.InfoWindow({
+            content: "<img src='"+data.user.profile_image_url+"' style='float:left; padding: 5px;' /><strong>"+data.user.screen_name+"</strong>: "+data.text,
+            maxWidth: 200
+          });
+
+          google.maps.event.addListener(marker, 'click', function() {
+            infoWindow.open(map, marker);
+          });
         }
       });
     });
