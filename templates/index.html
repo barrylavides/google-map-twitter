@@ -45,6 +45,12 @@
             map: map
           })  
 
+          // Remove marker after 20s
+          setTimeout(function() {
+             marker.setMap(null);
+             delete marker;
+          }, 10000);
+
           var infoWindow = new google.maps.InfoWindow({
             content: "<img src='"+data.user.profile_image_url+"' style='float:left; padding: 5px;' /><strong>"+data.user.screen_name+"</strong>: "+data.text,
             maxWidth: 200
