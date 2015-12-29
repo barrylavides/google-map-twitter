@@ -15,7 +15,7 @@
 <script>
     $(function() {
       //var latlng = new google.maps.LatLng(38.8833, 77.0167);
-      var latlng = {lat: 14.5833, lng: 121.0000};
+      var latlng = {lat: 14.5833, lng: 120.984222};
 
       var myOptions = {
         zoom: 9,
@@ -24,9 +24,20 @@
       };
     
       var map = new google.maps.Map(document.getElementById("map"), myOptions);
+
+      var infoWindow = new google.maps.InfoWindow({
+          maxWidth: 200
+      });
+
+      __map = map;
+
       namespace = '/tweets';
 
-      var socket = io.connect('//' + document.domain + ':' + location.port + namespace);
+      var url = document.domain + ':' + location.port + namespace;
+
+      console.log(url);
+
+      var socket = io.connect(url);
 
       socket.on('tweet', function(data) {
         console.log(data);
@@ -45,19 +56,16 @@
             map: map
           })  
 
-          // Remove marker after 20s
+          // Remove marker after 1m
           setTimeout(function() {
              marker.setMap(null);
              delete marker;
-          }, 10000);
+          }, 60000);
 
-          var infoWindow = new google.maps.InfoWindow({
-            content: "<img src='"+data.user.profile_image_url+"' style='float:left; padding: 5px;' /><strong>"+data.user.screen_name+"</strong>: "+data.text,
-            maxWidth: 200
-          });
 
-          google.maps.event.addListener(marker, 'click', function() {
-            infoWindow.open(map, marker);
+          google.maps.event.addListener(marker, 'mouseover', function() {
+            infoWindow.setContent("<img src='"+data.user.profile_image_url+"' style='float:left; padding: 5px;' /><strong>"+data.user.screen_name+"</strong>: "+data.text);
+            infoWindow.open(map, this);
           });
         }
       });

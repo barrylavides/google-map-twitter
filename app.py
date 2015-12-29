@@ -26,8 +26,6 @@ class TwitterStreamer(TwythonStreamer):
 
     def on_success(self, data):
         self.queue.put_nowait(data)
-        if self.queue.qsize() > 10000:
-            self.queue.get()
 
     def on_error(self, status_code, data):
         print status_code, data, "TwitterStreamer stopped because of an error!"
