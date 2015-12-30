@@ -53,6 +53,8 @@
             maxWidth: 200
         });
 
+        var geocoder = new google.maps.Geocoder();
+
         var url = document.domain + ':' + location.port + namespace;
         var socket = io.connect(url);
 
@@ -98,7 +100,7 @@
         autocomplete.addListener('place_changed', function(data, i) {
             var place = autocomplete.getPlace();
 
-            console.log(place);
+            console.log(place.formatted_address);
 
             if (!place.geometry) {
                 window.alert("Autocomplete's returned place contains no geometry");
@@ -110,6 +112,31 @@
                 map.setCenter(place.geometry.location);
                 map.setZoom(17);
             }
+
+            geocoder.geocode({'address': place.formatted_address}, function(results, status) {
+                if (status === google.maps.GeocoderStatus.OK) {
+                    if (!results[0].geometry.bounds) {
+                        alert('Location geometry bounds not found');
+                    } else {
+                        var bounds = results[0].geometry.bounds;
+                        var boundsObj = {
+                            'sw': {
+                                'lng': bounds.j.j,
+                                'lat': bounds.N.N
+                            },
+                            'ne': {
+                                'lng': bounds.j.N,
+                                'lat': bounds.N.j
+                            }
+                        };
+
+                        console.log(boundsObj);
+                    }
+                } else {
+                    alert('Geocode was not successful for the following reason: ' + status);
+                }
+
+            });
         });
 
         $('input').focus(function() {
