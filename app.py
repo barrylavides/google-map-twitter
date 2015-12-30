@@ -7,17 +7,18 @@ from flask import Flask, render_template, request, jsonify
 from flask.ext.socketio import SocketIO, emit
 from twython import TwythonStreamer
 
+from conf import ENV
+
 app = Flask(__name__)
-app.debug = True
-app.host = '0.0.0.0'
+
+
+app.debug = ENV['DEBUG']
+app.host = ENV['HOST']
+port = ENV['PORT']
+
 app.config['SECRET_KEY'] = 'secret!'
 socketio = SocketIO(app)
-port = 5000
 
-consumer_key = 'hDgwUvUp5ODnkCnNcmpXx1SjI'
-consumer_secret = 'ZC9x8sv6GL0plhHkKeQPWL2UJTXeznoEDXSclJARPDkqeTgEtv'
-access_token_key = '129161732-b6fdgdW3vhrwqyZoi9W2wBywiffZVLZVQwbspIRX'
-access_token_secret = 'C8UH8bsXDqH5rbmP5g5UGqeUZZDQbns6J6uMgk5Oxw2xR'
 
 class TwitterStreamer(TwythonStreamer):
     def __init__(self, *args, **kwargs):
@@ -36,7 +37,13 @@ class TwitterStreamer(TwythonStreamer):
 class Watch:
     def __init__(self, sw_lng=None, sw_lat=None, ne_lng=None, ne_lat=None):
         print 'Start stream'
-        self.streamer = TwitterStreamer(consumer_key, consumer_secret, access_token_key, access_token_secret)
+
+        self.streamer = TwitterStreamer(\
+            ENV['CONSUMER_KEY'], \
+            ENV['CONSUMER_SECRET'], \
+            ENV['ACCESS_TOKEN_KEY'], \
+            ENV['ACCESS_TOKEN_SECRET']\
+        )
         
         # CA
         #locations = [-122.75,36.8,-121.75,37.8]
