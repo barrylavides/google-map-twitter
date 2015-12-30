@@ -34,18 +34,28 @@ class TwitterStreamer(TwythonStreamer):
 
 
 class Watch:
-    def __init__(self):
+    def __init__(self, sw_lng=None, sw_lat=None, ne_lng=None, ne_lat=None):
+        print 'Start stream'
         self.streamer = TwitterStreamer(consumer_key, consumer_secret, access_token_key, access_token_secret)
         
         # CA
         #locations = [-122.75,36.8,-121.75,37.8]
-        sw_lng = 120.9172569
-        sw_lat = 14.3493861
-        ne_lng = 121.132012
-        ne_lat = 14.781217
 
-        locations = [sw_lng,sw_lat,ne_lng,ne_lat]
+        if sw_lng == None:
+            # Metro Manila
+            self.sw_lng = 120.9172569
+            self.sw_lat = 14.3493861
+            self.ne_lng = 121.132012
+            self.ne_lat = 14.781217
+        else:
+            self.sw_lng = sw_lng
+            self.sw_lat = sw_lat
+            self.ne_lng = ne_lng
+            self.ne_lat = ne_lat
+
+        locations = [self.sw_lng, self.sw_lat, self.ne_lng, self.ne_lat]
         self.green = gevent.spawn(self.streamer.statuses.filter, locations=locations)
+
 
     def check_alive(self):
         if self.green.dead:
@@ -66,6 +76,14 @@ def index():
 @app.route('/change_location', methods=['POST'])
 def change_location():
     data = request.json
+
+    # Change stream location
+    sw_lng = data['sw']['lng']
+    sw_lat = data['sw']['lat']
+    ne_lng = data['ne']['lng']
+    ne_lat = data['ne']['lat']
+    
+    watch.__init__(sw_lng, sw_lat, ne_lng, ne_lat)
 
     return jsonify({
         'status': 'Received',

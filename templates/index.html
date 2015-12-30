@@ -107,7 +107,7 @@
                 return;
             } else if (place.geometry.viewport) {
                 map.fitBounds(place.geometry.viewport);
-                map.setZoom(9);
+                map.setZoom(5);
             } else {
                 map.setCenter(place.geometry.location);
                 map.setZoom(17);
@@ -141,6 +141,8 @@
                             success: function(data) {
                                 console.log('server response');
                                 console.log(data);
+
+                                infoWindow.close();
                             }
                         });
                     }
