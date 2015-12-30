@@ -1,5 +1,6 @@
 var namespace = '/tweets',
     marker = '',
+    tweetCounts = 0,
     CONFIG = {
         defaultMap: {
             // Metro manila coordinates
@@ -62,6 +63,11 @@ $(function() {
                 animation: google.maps.Animation.DROP,
                 map: map
             });
+
+            if (marker) {
+                // Static tweet counts
+                $('#tweet-counts span').text(tweetCounts += 1);    
+            }
 
             // Remove marker after 1m
             setTimeout(function() {

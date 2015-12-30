@@ -28,12 +28,17 @@
         }
 
         #autocomplete {
-            position: absolute;
             top: 0px;
             left: 0px;
             width: 99%;
             padding: 10px;
             font-size: 14px;
+        }
+
+        #tweet-counts {
+            float: left;
+            font: 14px BlinkMacSystemFont;
+            margin: 4px 12px 4px;
         }
     </style>
     <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
@@ -44,6 +49,7 @@
 <body>
     <div id="locationField">
         <input id="autocomplete" placeholder="Search and change location" type="text"></input>
+        <label id="tweet-counts">Tweet counts: <span>0</span></label>
     </div>
     <div id="map"></div>
 </body>
