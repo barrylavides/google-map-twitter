@@ -3,12 +3,13 @@ monkey.patch_all()
 
 import gevent
 import os
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, jsonify
 from flask.ext.socketio import SocketIO, emit
 from twython import TwythonStreamer
 
 app = Flask(__name__)
 app.debug = True
+app.host = '0.0.0.0'
 app.config['SECRET_KEY'] = 'secret!'
 socketio = SocketIO(app)
 port = 5000
@@ -54,13 +55,22 @@ class Watch:
             # then reload
             self.__init__()
 
-
 watch = Watch()
 
 
 @app.route('/')
 def index():
     return render_template('index.html')
+
+
+@app.route('/change_location', methods=['POST'])
+def change_location():
+    data = request.json
+
+    return jsonify({
+        'status': 'Received',
+        'data': data
+    }), 200
 
 
 @socketio.on('connect', namespace='/tweets')
@@ -84,4 +94,4 @@ def tweets_disconnect():
 
 
 if __name__ == '__main__':
-    socketio.run(app, port=port, host="0.0.0.0")
+    socketio.run(app, port=port)
