@@ -35,12 +35,14 @@ class TwitterStreamer(TwythonStreamer):
 class Watch:
     def __init__(self):
         self.streamer = TwitterStreamer(consumer_key, consumer_secret, access_token_key, access_token_secret)
-
-        sw_lng = 118.19024658203125
-        sw_lat = 13.768446679434579
-        ne_lng = 123.80975341796875
-        ne_lat = 15.395149451430095
+        
+        # CA
         #locations = [-122.75,36.8,-121.75,37.8]
+        sw_lng = 120.9172569
+        sw_lat = 14.3493861
+        ne_lng = 121.132012
+        ne_lat = 14.781217
+
         locations = [sw_lng,sw_lat,ne_lng,ne_lat]
         self.green = gevent.spawn(self.streamer.statuses.filter, locations=locations)
 
