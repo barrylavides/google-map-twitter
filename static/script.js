@@ -117,15 +117,16 @@ $(function() {
                         boundsObj = {
                             'sw': {
                                 'lng': bounds.j.j,
-                                'lat': bounds.N.N
+                                'lat': 'R' in bounds ? bounds.R.R : bounds.N.N
                             },
                             'ne': {
-                                'lng': bounds.j.N,
-                                'lat': bounds.N.j
+                                'lng': 'R' in bounds ? bounds.j.R : bounds.j.N,
+                                'lat': 'R' in bounds ? bounds.R.j : bounds.N.j
                             }
                         };
 
                     console.log(boundsObj);
+                    console.log(bounds);
 
                     $.ajax({
                         type: 'POST',
