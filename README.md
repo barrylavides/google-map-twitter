@@ -6,8 +6,8 @@ A Google Map app that streams real time tweets of a certain location. Markers dr
 #API
 
 ###SocketIO url
-`http://(IP/Domain):5000/tweets`
+`http://(IP/Domain)/tweets`
 
 To change the location of twitter stream, use Google Map's geometric bounds, see example below
 
-`curl -H "Content-Type: application/json" -X POST -d '{'sw':{'lng':'','lat':''},'ne':{'lng':'','lat':''}}' http://(IP/Domain):5000/change_location`
+`curl -H "Content-Type: application/json" -X POST -d '{'sw':{'lng':'','lat':''},'ne':{'lng':'','lat':''}}' http://(IP/Domain)/change_location`
