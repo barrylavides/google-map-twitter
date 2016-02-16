@@ -64,11 +64,17 @@ class Watch:
         self.green = gevent.spawn(self.streamer.statuses.filter, locations=locations)
 
 
+    def kill_connection(self):
+        # stop everything
+        print 'Stop all existing streams'
+        self.streamer.disconnect()
+        self.green.kill()
+
+
     def check_alive(self):
         if self.green.dead:
-            # stop everything
-            self.streamer.disconnect()
-            self.green.kill()
+            self.kill_connection()
+
             # then reload
             self.__init__()
 
@@ -90,6 +96,8 @@ def change_location():
     ne_lng = data['ne']['lng']
     ne_lat = data['ne']['lat']
     
+    # Stop all existing connection before creating a new one
+    watch.kill_connection()
     watch.__init__(sw_lng, sw_lat, ne_lng, ne_lat)
 
     return jsonify({
@@ -119,4 +127,4 @@ def tweets_disconnect():
 
 
 if __name__ == '__main__':
-    socketio.run(app, port=port)
+    socketio.run(app, port=port, host='0.0.0.0')
