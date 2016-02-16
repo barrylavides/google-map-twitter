@@ -8,8 +8,6 @@ API
 SocketIO url
 (IP/Domain)/tweets
 
-To change the location of twitter stream
-// Geometric Bounds
-// Ex.
+To change the location of twitter stream, use Google Map's geometric bounds, see example below
 
 curl -H "Content-Type: application/json" -X POST -d '{'sw':{'lng':'','lat':''},'ne':{'lng':'','lat':''}}' (IP/Domain)/change_location
