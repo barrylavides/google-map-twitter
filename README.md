@@ -5,7 +5,7 @@ A Google Map app that streams real time tweets of a certain location. Markers dr
 
 #API
 
-SocketIO url
+###SocketIO url
 (IP/Domain)/tweets
 
 To change the location of twitter stream, use Google Map's geometric bounds, see example below
